@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mainapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - 80:80
+    environments:
+    - MYSQL_HOST=databaseimage
+    - MYSQL_DATABASE=my_news
+    - MYSQL_USER=root
+    - MYSQL_PASSWORD=srijan1
+    - MYSQL_PORT=3306
+    links:
+    - databaseimage
+
+  databaseimage:
+    image: mysql
+    restart: always
+    environment:
+    - MYSQL_ROOT_PASSWORD=srijan1
+    - MYSQL_DATABASE=my_news #created a database to match with the reqest from php application
+    volumes:
+    - ./NorthamptonNews/my_news.sql:/docker-entrypoint-initdb.d/my_news.sql
+      
