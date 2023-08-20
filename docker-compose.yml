@@ -5,22 +5,29 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-    - 80:80
-    environments:
-    - MYSQL_HOST=databaseimage
-    - MYSQL_DATABASE=my_news
-    - MYSQL_USER=root
-    - MYSQL_PASSWORD=srijan1
-    - MYSQL_PORT=3306
+      - 80:80
+    environment:
+      - MYSQL_HOST=databaseimage
+      - MYSQL_DATABASE=my_news
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=srijan1
+      - MYSQL_PORT=3306
     links:
-    - databaseimage
+      - databaseimage
+    x-develop:
+      watch:
+        - action: sync
+          path: ./NorthamptonNews/
+          target: /var/www/html/
+        - action: sync
+          path: ./NorthamptonNews/
 
   databaseimage:
     image: mysql
     restart: always
     environment:
-    - MYSQL_ROOT_PASSWORD=srijan1
-    - MYSQL_DATABASE=my_news #created a database to match with the reqest from php application
+      - MYSQL_ROOT_PASSWORD=srijan1
+      - MYSQL_DATABASE=my_news #created a database to match with the reqest from php application
     volumes:
-    - ./NorthamptonNews/my_news.sql:/docker-entrypoint-initdb.d/my_news.sql
+      - ./NorthamptonNews/my_news.sql:/docker-entrypoint-initdb.d/my_news.sql
       
